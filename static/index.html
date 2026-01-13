@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Domain Network Visualizer</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,658 +15,658 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
             padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 0.95em;
+            opacity: 0.9;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 32px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .controls {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .control-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: flex;
+            flex: 1;
             gap: 20px;
-            margin-bottom: 20px;
+            padding: 20px;
+            overflow: hidden;
         }
 
-        .control-item {
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
 
-        label {
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
             font-weight: 600;
             color: #333;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 0.9em;
         }
 
-        input[type="file"],
-        select {
+        .control-group input,
+        .control-group button {
+            width: 100%;
             padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
         }
 
-        input[type="file"]:focus,
-        select:focus {
+        .control-group input {
+            margin-bottom: 5px;
+        }
+
+        .control-group input:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
         }
 
-        select {
-            cursor: pointer;
-            background-color: white;
-        }
-
-        select:disabled {
-            background-color: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 10px 20px;
+        .control-group button {
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        button:hover:not(:disabled) {
+        .control-group button:hover {
             background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
         }
 
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+        .control-group button:active {
+            transform: translateY(0);
         }
 
-        button.secondary {
-            background: #666;
+        .info-panel {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
-        button.secondary:hover:not(:disabled) {
-            background: #555;
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.05em;
         }
 
-        .visualization-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            min-height: 600px;
-        }
-
-        #network {
-            width: 100%;
-            height: 600px;
-            border-radius: 4px;
-            background: #f9f9f9;
+        .info-panel p {
+            color: #666;
+            line-height: 1.5;
         }
 
         .stats {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-box {
             background: #f5f5f5;
-            padding: 20px;
-            border-radius: 4px;
-            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
         }
 
-        .stat-label {
+        .stats h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
             color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        #visualization {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        }
+
+        .node {
+            stroke: #fff;
+            stroke-width: 2px;
+            cursor: move;
+            transition: opacity 0.2s;
+        }
+
+        .node:hover {
+            filter: brightness(1.2);
+            stroke-width: 3px;
+        }
+
+        .node.selected {
+            stroke-width: 3px;
+            stroke: #ff6b6b;
+            filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.5));
+        }
+
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+            pointer-events: none;
+        }
+
+        .link.selected {
+            stroke: #667eea;
+            stroke-opacity: 1;
+            stroke-width: 2.5px;
+        }
+
+        text.node-label {
             font-size: 12px;
             font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            text-anchor: middle;
+            pointer-events: none;
+            fill: #333;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
         }
 
-        .stat-value {
-            color: #333;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .message {
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            pointer-events: none;
+            z-index: 1000;
             display: none;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .message.error {
-            background: #ffebee;
-            color: #c62828;
+        .tooltip.active {
             display: block;
-            border-left: 4px solid #c62828;
-        }
-
-        .message.success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            display: block;
-            border-left: 4px solid #2e7d32;
-        }
-
-        .message.info {
-            background: #e3f2fd;
-            color: #1565c0;
-            display: block;
-            border-left: 4px solid #1565c0;
         }
 
         .legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .legend-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .legend-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            z-index: 100;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
         }
 
         .legend-color {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            flex-shrink: 0;
+            margin-right: 8px;
         }
 
-        .legend-text {
-            color: #666;
-            font-size: 14px;
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
         }
 
         @media (max-width: 768px) {
-            .control-group {
-                grid-template-columns: 1fr;
+            .container {
+                flex-direction: column;
             }
 
-            h1 {
-                font-size: 24px;
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
             }
 
-            #network {
-                height: 400px;
+            header h1 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>🌐 Domain Network Visualizer</h1>
+        <p>Explore domain relationships with interactive D3.js visualization</p>
+    </header>
+
     <div class="container">
-        <div class="header">
-            <h1>🌐 Domain Network Visualizer</h1>
-            <p class="subtitle">Upload a CSV file with domain data to visualize network relationships</p>
-        </div>
+        <aside class="sidebar">
+            <h2>⚙️ Controls</h2>
 
-        <div id="message" class="message"></div>
-
-        <div class="controls">
             <div class="control-group">
-                <div class="control-item">
-                    <label for="csvFile">Upload CSV File</label>
-                    <input type="file" id="csvFile" accept=".csv" />
-                </div>
-
-                <div class="control-item">
-                    <label for="sourceColumn">Source Column</label>
-                    <select id="sourceColumn" disabled>
-                        <option value="">Select a column...</option>
-                    </select>
-                </div>
-
-                <div class="control-item">
-                    <label for="targetColumn">Target Column</label>
-                    <select id="targetColumn" disabled>
-                        <option value="">Select a column...</option>
-                    </select>
-                </div>
-
-                <div class="control-item">
-                    <label for="valueColumn">Value Column (Optional)</label>
-                    <select id="valueColumn" disabled>
-                        <option value="">Select a column...</option>
-                    </select>
-                </div>
+                <label for="searchInput">Search Domains:</label>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Enter domain name..."
+                >
             </div>
 
-            <div class="button-group">
-                <button id="visualizeBtn" disabled>Visualize Network</button>
-                <button id="resetBtn" class="secondary">Reset</button>
+            <div class="control-group">
+                <button id="loadSampleBtn">📊 Load Sample Data</button>
+                <button id="clearBtn">🗑️ Clear Network</button>
             </div>
-        </div>
 
-        <div class="stats">
-            <div class="stat-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Total Nodes</div>
-                    <div class="stat-value" id="nodeCount">0</div>
+            <div class="control-group">
+                <label for="forceStrength">Force Strength:</label>
+                <input 
+                    type="range" 
+                    id="forceStrength" 
+                    min="-300" 
+                    max="-10" 
+                    value="-100"
+                >
+                <span id="forceValue">-100</span>
+            </div>
+
+            <div class="control-group">
+                <label for="linkDistance">Link Distance:</label>
+                <input 
+                    type="range" 
+                    id="linkDistance" 
+                    min="20" 
+                    max="200" 
+                    value="60"
+                >
+                <span id="distanceValue">60</span>
+            </div>
+
+            <div class="control-group">
+                <button id="resetZoomBtn">🔍 Reset Zoom</button>
+            </div>
+
+            <div class="info-panel">
+                <h3>ℹ️ Instructions</h3>
+                <p>
+                    • <strong>Drag</strong> nodes to reposition<br>
+                    • <strong>Scroll</strong> to zoom<br>
+                    • <strong>Click & drag</strong> background to pan<br>
+                    • <strong>Click</strong> a node to select<br>
+                    • Use controls to customize
+                </p>
+            </div>
+
+            <div class="stats">
+                <h3>📈 Statistics</h3>
+                <div class="stat-item">
+                    <span>Nodes:</span>
+                    <strong id="nodeCount">0</strong>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Total Links</div>
-                    <div class="stat-value" id="linkCount">0</div>
+                <div class="stat-item">
+                    <span>Links:</span>
+                    <strong id="linkCount">0</strong>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Data Rows</div>
-                    <div class="stat-value" id="rowCount">0</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Columns</div>
-                    <div class="stat-value" id="columnCount">0</div>
+                <div class="stat-item">
+                    <span>Selected:</span>
+                    <strong id="selectedCount">0</strong>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <div class="legend">
-            <div class="legend-title">Legend</div>
-            <div class="legend-items">
+        <div id="visualization">
+            <svg id="networkSvg"></svg>
+            <div class="tooltip" id="tooltip"></div>
+            <div class="legend" id="legend">
                 <div class="legend-item">
                     <div class="legend-color" style="background: #667eea;"></div>
-                    <div class="legend-text">Nodes - Sized by degree</div>
+                    <span>Domain</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #ccc;"></div>
-                    <div class="legend-text">Links - Connection strength</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #e74c3c;"></div>
-                    <div class="legend-text">Hub nodes (high degree)</div>
+                    <div class="legend-color" style="background: #764ba2;"></div>
+                    <span>Related</span>
                 </div>
             </div>
-        </div>
-
-        <div class="visualization-container">
-            <svg id="network"></svg>
         </div>
     </div>
 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
-        let csvData = null;
-        let columns = [];
-        let currentVisualization = null;
+        // Configuration
+        const CONFIG = {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            margin: { top: 0, right: 0, bottom: 0, left: 0 }
+        };
 
-        const csvFile = document.getElementById('csvFile');
-        const sourceColumn = document.getElementById('sourceColumn');
-        const targetColumn = document.getElementById('targetColumn');
-        const valueColumn = document.getElementById('valueColumn');
-        const visualizeBtn = document.getElementById('visualizeBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const messageDiv = document.getElementById('message');
+        // State
+        let networkData = {
+            nodes: [],
+            links: []
+        };
+        let selectedNode = null;
+        let simulation = null;
 
-        // Event Listeners
-        csvFile.addEventListener('change', handleFileUpload);
-        sourceColumn.addEventListener('change', updateVisualizationState);
-        targetColumn.addEventListener('change', updateVisualizationState);
-        valueColumn.addEventListener('change', updateVisualizationState);
-        visualizeBtn.addEventListener('click', visualizeNetwork);
-        resetBtn.addEventListener('click', resetApp);
+        // Initialize SVG
+        const svg = d3.select('#networkSvg');
+        const container = svg.append('g').attr('class', 'container');
+        const linksGroup = container.append('g').attr('class', 'links');
+        const nodesGroup = container.append('g').attr('class', 'nodes');
+        const labelsGroup = container.append('g').attr('class', 'labels');
 
-        function showMessage(message, type = 'info') {
-            messageDiv.textContent = message;
-            messageDiv.className = `message ${type}`;
-            setTimeout(() => {
-                messageDiv.className = 'message';
-            }, 5000);
-        }
-
-        function handleFileUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            Papa.parse(file, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    if (results.data.length === 0) {
-                        showMessage('CSV file is empty', 'error');
-                        return;
-                    }
-
-                    csvData = results.data;
-                    columns = results.meta.fields || Object.keys(results.data[0] || {});
-
-                    // Trim whitespace from column names
-                    columns = columns.map(col => col.trim());
-
-                    // Update statistics
-                    document.getElementById('rowCount').textContent = csvData.length;
-                    document.getElementById('columnCount').textContent = columns.length;
-
-                    // Populate column dropdowns
-                    populateColumnDropdowns();
-
-                    showMessage(`CSV loaded successfully! ${csvData.length} rows, ${columns.length} columns`, 'success');
-                    updateVisualizationState();
-                },
-                error: function(error) {
-                    showMessage(`Error parsing CSV: ${error.message}`, 'error');
-                }
-            });
-        }
-
-        function populateColumnDropdowns() {
-            // Clear existing options (except the first placeholder)
-            [sourceColumn, targetColumn, valueColumn].forEach(dropdown => {
-                while (dropdown.options.length > 1) {
-                    dropdown.remove(1);
-                }
+        // Setup zoom
+        const zoom = d3.zoom()
+            .on('zoom', (event) => {
+                container.attr('transform', event.transform);
             });
 
-            // Add columns to dropdowns
-            columns.forEach(column => {
-                const option = document.createElement('option');
-                option.value = column;
-                option.textContent = column;
+        svg.call(zoom);
 
-                sourceColumn.appendChild(option.cloneNode(true));
-                targetColumn.appendChild(option.cloneNode(true));
-                valueColumn.appendChild(option.cloneNode(true));
-            });
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const rect = document.getElementById('visualization').getBoundingClientRect();
+            CONFIG.width = rect.width;
+            CONFIG.height = rect.height;
+            svg.attr('width', CONFIG.width).attr('height', CONFIG.height);
+            if (simulation) simulation.alpha(0.3).restart();
+        });
 
-            // Enable dropdowns
-            sourceColumn.disabled = false;
-            targetColumn.disabled = false;
-            valueColumn.disabled = false;
-
-            // Auto-select first two columns as source and target if available
-            if (columns.length >= 2) {
-                sourceColumn.value = columns[0];
-                targetColumn.value = columns[1];
-                if (columns.length >= 3) {
-                    valueColumn.value = columns[2];
-                }
-            }
-        }
-
-        function updateVisualizationState() {
-            const sourceSelected = sourceColumn.value !== '';
-            const targetSelected = targetColumn.value !== '';
-            const validSelection = sourceSelected && targetSelected && sourceColumn.value !== targetColumn.value;
-            visualizeBtn.disabled = !validSelection;
-        }
-
-        function visualizeNetwork() {
-            if (!csvData || !sourceColumn.value || !targetColumn.value) {
-                showMessage('Please select source and target columns', 'error');
-                return;
-            }
-
-            if (sourceColumn.value === targetColumn.value) {
-                showMessage('Source and target columns must be different', 'error');
-                return;
-            }
-
-            try {
-                const nodes = new Map();
-                const links = [];
-
-                // Process data
-                csvData.forEach(row => {
-                    const source = String(row[sourceColumn.value] || '').trim();
-                    const target = String(row[targetColumn.value] || '').trim();
-                    const value = valueColumn.value ? parseFloat(row[valueColumn.value]) : 1;
-
-                    if (source && target) {
-                        // Add nodes
-                        if (!nodes.has(source)) {
-                            nodes.set(source, { id: source });
-                        }
-                        if (!nodes.has(target)) {
-                            nodes.set(target, { id: target });
-                        }
-
-                        // Add link
-                        links.push({
-                            source: source,
-                            target: target,
-                            value: isNaN(value) ? 1 : Math.max(0.5, value)
-                        });
-                    }
-                });
-
-                // Create visualization
-                createNetworkVisualization(Array.from(nodes.values()), links);
-
-                // Update statistics
-                document.getElementById('nodeCount').textContent = nodes.size;
-                document.getElementById('linkCount').textContent = links.length;
-
-                showMessage('Network visualization created successfully!', 'success');
-            } catch (error) {
-                showMessage(`Error creating visualization: ${error.message}`, 'error');
-            }
-        }
-
-        function createNetworkVisualization(nodes, links) {
-            const width = document.getElementById('network').clientWidth;
-            const height = 600;
-
-            // Clear previous visualization
-            d3.select('#network').selectAll('*').remove();
-
-            const svg = d3.select('#network')
-                .attr('width', width)
-                .attr('height', height);
-
-            // Create force simulation
-            const simulation = d3.forceSimulation(nodes)
-                .force('link', d3.forceLink(links)
+        // Initialize force simulation
+        function initializeSimulation() {
+            simulation = d3.forceSimulation(networkData.nodes)
+                .force('link', d3.forceLink(networkData.links)
                     .id(d => d.id)
-                    .distance(100)
-                    .strength(0.5))
-                .force('charge', d3.forceManyBody().strength(-300))
-                .force('center', d3.forceCenter(width / 2, height / 2))
-                .force('collision', d3.forceCollide().radius(30));
+                    .distance(+document.getElementById('linkDistance').value))
+                .force('charge', d3.forceManyBody()
+                    .strength(+document.getElementById('forceStrength').value))
+                .force('center', d3.forceCenter(CONFIG.width / 2, CONFIG.height / 2))
+                .force('collision', d3.forceCollide().radius(30))
+                .on('tick', () => {
+                    updateVisualization();
+                });
+        }
 
-            // Create arrow markers for links
-            svg.append('defs').selectAll('marker')
-                .data(['default'])
-                .enter()
-                .append('marker')
-                .attr('id', d => `arrow-${d}`)
-                .attr('viewBox', '0 -5 10 10')
-                .attr('refX', 20)
-                .attr('refY', 0)
-                .attr('markerWidth', 6)
-                .attr('markerHeight', 6)
-                .attr('orient', 'auto')
-                .append('path')
-                .attr('d', 'M0,-5L10,0L0,5')
-                .attr('fill', '#999');
-
-            // Create links
-            const link = svg.selectAll('line')
-                .data(links)
-                .enter()
+        // Update visualization
+        function updateVisualization() {
+            // Update links
+            const links = linksGroup.selectAll('.link').data(networkData.links, d => `${d.source.id}-${d.target.id}`);
+            links.exit().remove();
+            links.enter()
                 .append('line')
-                .attr('stroke', '#ccc')
-                .attr('stroke-width', d => Math.sqrt(d.value) * 2)
-                .attr('marker-end', 'url(#arrow-default)')
-                .attr('opacity', 0.6);
+                .attr('class', 'link')
+                .merge(links)
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
 
-            // Calculate node degrees
-            const nodeDegree = new Map();
-            links.forEach(link => {
-                nodeDegree.set(link.source.id || link.source, (nodeDegree.get(link.source.id || link.source) || 0) + 1);
-                nodeDegree.set(link.target.id || link.target, (nodeDegree.get(link.target.id || link.target) || 0) + 1);
-            });
-
-            // Create nodes
-            const node = svg.selectAll('circle')
-                .data(nodes)
-                .enter()
+            // Update nodes
+            const nodes = nodesGroup.selectAll('.node').data(networkData.nodes, d => d.id);
+            nodes.exit().remove();
+            nodes.enter()
                 .append('circle')
-                .attr('r', d => {
-                    const degree = nodeDegree.get(d.id) || 0;
-                    return Math.max(5, Math.sqrt(degree) * 5);
-                })
-                .attr('fill', d => {
-                    const degree = nodeDegree.get(d.id) || 0;
-                    return degree > 5 ? '#e74c3c' : '#667eea';
-                })
-                .attr('stroke', 'white')
-                .attr('stroke-width', 2)
+                .attr('class', 'node')
+                .attr('r', d => d.size || 8)
+                .attr('fill', d => d.color || '#667eea')
                 .call(d3.drag()
                     .on('start', dragStarted)
                     .on('drag', dragged)
-                    .on('end', dragEnded));
+                    .on('end', dragEnded))
+                .on('click', (event, d) => {
+                    event.stopPropagation();
+                    selectNode(d);
+                })
+                .on('mouseenter', (event, d) => showTooltip(event, d))
+                .on('mouseleave', hideTooltip)
+                .merge(nodes)
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
 
-            // Create labels
-            const label = svg.selectAll('text')
-                .data(nodes)
-                .enter()
+            // Update labels
+            const labels = labelsGroup.selectAll('text').data(networkData.nodes, d => d.id);
+            labels.exit().remove();
+            labels.enter()
                 .append('text')
-                .attr('font-size', '12px')
-                .attr('fill', '#333')
-                .attr('text-anchor', 'middle')
-                .attr('dy', '0.3em')
-                .attr('pointer-events', 'none')
-                .text(d => d.id)
-                .style('opacity', 0.7);
+                .attr('class', 'node-label')
+                .text(d => d.label)
+                .merge(labels)
+                .attr('x', d => d.x)
+                .attr('y', d => d.y + 4);
 
-            // Update positions on simulation tick
-            simulation.on('tick', () => {
-                link
-                    .attr('x1', d => d.source.x)
-                    .attr('y1', d => d.source.y)
-                    .attr('x2', d => d.target.x)
-                    .attr('y2', d => d.target.y);
-
-                node
-                    .attr('cx', d => d.x)
-                    .attr('cy', d => d.y);
-
-                label
-                    .attr('x', d => d.x)
-                    .attr('y', d => d.y);
-            });
-
-            // Drag functions
-            function dragStarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(event, d) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-
-            function dragEnded(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-
-            // Add zoom functionality
-            const zoom = d3.zoom()
-                .on('zoom', (event) => {
-                    svg.selectAll('line,circle,text').attr('transform', event.transform);
-                });
-
-            svg.call(zoom);
-
-            currentVisualization = { simulation, svg };
+            updateStats();
         }
 
-        function resetApp() {
-            csvData = null;
-            columns = [];
-            csvFile.value = '';
-            sourceColumn.value = '';
-            targetColumn.value = '';
-            valueColumn.value = '';
-            sourceColumn.disabled = true;
-            targetColumn.disabled = true;
-            valueColumn.disabled = true;
-            visualizeBtn.disabled = true;
-
-            [sourceColumn, targetColumn, valueColumn].forEach(dropdown => {
-                while (dropdown.options.length > 1) {
-                    dropdown.remove(1);
-                }
-            });
-
-            document.getElementById('nodeCount').textContent = '0';
-            document.getElementById('linkCount').textContent = '0';
-            document.getElementById('rowCount').textContent = '0';
-            document.getElementById('columnCount').textContent = '0';
-
-            d3.select('#network').selectAll('*').remove();
-            showMessage('Application reset', 'info');
+        // Drag functions
+        function dragStarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
         }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragEnded(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Node selection
+        function selectNode(d) {
+            selectedNode = selectedNode?.id === d.id ? null : d;
+            
+            nodesGroup.selectAll('.node').classed('selected', node => node.id === selectedNode?.id);
+            linksGroup.selectAll('.link').classed('selected', link => 
+                selectedNode && (link.source.id === selectedNode.id || link.target.id === selectedNode.id)
+            );
+            
+            updateStats();
+        }
+
+        // Tooltip
+        function showTooltip(event, d) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.textContent = `${d.label} (${d.id})`;
+            tooltip.classList.add('active');
+            tooltip.style.left = (event.pageX + 10) + 'px';
+            tooltip.style.top = (event.pageY + 10) + 'px';
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('active');
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('nodeCount').textContent = networkData.nodes.length;
+            document.getElementById('linkCount').textContent = networkData.links.length;
+            
+            let connectedCount = 0;
+            if (selectedNode) {
+                connectedCount = networkData.links.filter(link =>
+                    link.source.id === selectedNode.id || link.target.id === selectedNode.id
+                ).length;
+            }
+            document.getElementById('selectedCount').textContent = connectedCount;
+        }
+
+        // Generate sample data
+        function generateSampleData() {
+            networkData = {
+                nodes: [
+                    { id: 'example.com', label: 'example.com', color: '#667eea', size: 12 },
+                    { id: 'sub1.example.com', label: 'sub1', color: '#764ba2', size: 10 },
+                    { id: 'sub2.example.com', label: 'sub2', color: '#764ba2', size: 10 },
+                    { id: 'api.example.com', label: 'api', color: '#764ba2', size: 10 },
+                    { id: 'cdn.example.com', label: 'cdn', color: '#764ba2', size: 10 },
+                    { id: 'mail.example.com', label: 'mail', color: '#764ba2', size: 10 },
+                    { id: 'staging.example.com', label: 'staging', color: '#764ba2', size: 10 },
+                    { id: 'dev.example.com', label: 'dev', color: '#764ba2', size: 10 }
+                ],
+                links: [
+                    { source: 'example.com', target: 'sub1.example.com' },
+                    { source: 'example.com', target: 'sub2.example.com' },
+                    { source: 'example.com', target: 'api.example.com' },
+                    { source: 'example.com', target: 'cdn.example.com' },
+                    { source: 'example.com', target: 'mail.example.com' },
+                    { source: 'example.com', target: 'staging.example.com' },
+                    { source: 'example.com', target: 'dev.example.com' },
+                    { source: 'sub1.example.com', target: 'api.example.com' },
+                    { source: 'sub2.example.com', target: 'staging.example.com' }
+                ]
+            };
+            initializeSimulation();
+            updateVisualization();
+        }
+
+        // Event listeners
+        document.getElementById('loadSampleBtn').addEventListener('click', generateSampleData);
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            networkData = { nodes: [], links: [] };
+            selectedNode = null;
+            linksGroup.selectAll('.link').remove();
+            nodesGroup.selectAll('.node').remove();
+            labelsGroup.selectAll('text').remove();
+            updateStats();
+        });
+
+        document.getElementById('resetZoomBtn').addEventListener('click', () => {
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity.translate(0, 0).scale(1)
+            );
+        });
+
+        document.getElementById('forceStrength').addEventListener('input', (e) => {
+            document.getElementById('forceValue').textContent = e.target.value;
+            if (simulation) {
+                simulation.force('charge', d3.forceManyBody().strength(+e.target.value));
+                simulation.alpha(0.3).restart();
+            }
+        });
+
+        document.getElementById('linkDistance').addEventListener('input', (e) => {
+            document.getElementById('distanceValue').textContent = e.target.value;
+            if (simulation) {
+                simulation.force('link', d3.forceLink(networkData.links)
+                    .id(d => d.id)
+                    .distance(+e.target.value));
+                simulation.alpha(0.3).restart();
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            nodesGroup.selectAll('.node').style('opacity', d =>
+                !query || d.id.toLowerCase().includes(query) ? 1 : 0.2
+            );
+            labelsGroup.selectAll('text').style('opacity', d =>
+                !query || d.id.toLowerCase().includes(query) ? 1 : 0.2
+            );
+        });
+
+        svg.on('click', () => {
+            if (selectedNode) {
+                selectedNode = null;
+                nodesGroup.selectAll('.node').classed('selected', false);
+                linksGroup.selectAll('.link').classed('selected', false);
+                updateStats();
+            }
+        });
+
+        // Initialize
+        updateStats();
     </script>
 </body>
 </html>
