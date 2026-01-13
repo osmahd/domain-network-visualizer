@@ -13,263 +13,215 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        header p {
-            font-size: 0.95em;
-            opacity: 0.9;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
         .container {
-            display: flex;
-            flex: 1;
-            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 20px;
-            overflow: hidden;
         }
 
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-radius: 10px;
+        header {
+            background-color: #2c3e50;
+            color: white;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .control-group {
+            border-radius: 8px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .control-group label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-
-        .control-group input,
-        .control-group button {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-        }
-
-        .control-group input {
+        header h1 {
             margin-bottom: 5px;
         }
 
-        .control-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        header p {
+            opacity: 0.9;
+            font-size: 14px;
         }
 
-        .control-group button {
-            background: #667eea;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .control-group button:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .control-group button:active {
-            transform: translateY(0);
-        }
-
-        .info-panel {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .info-panel h3 {
-            color: #667eea;
-            margin-bottom: 8px;
-            font-size: 1.05em;
-        }
-
-        .info-panel p {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .stats {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
-
-        .stats h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.05em;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            color: #666;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .stat-item:last-child {
-            border-bottom: none;
-        }
-
-        #visualization {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
-        }
-
-        .node {
-            stroke: #fff;
-            stroke-width: 2px;
-            cursor: move;
-            transition: opacity 0.2s;
-        }
-
-        .node:hover {
-            filter: brightness(1.2);
-            stroke-width: 3px;
-        }
-
-        .node.selected {
-            stroke-width: 3px;
-            stroke: #ff6b6b;
-            filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.5));
-        }
-
-        .link {
-            stroke: #999;
-            stroke-opacity: 0.6;
-            stroke-width: 1.5px;
-            pointer-events: none;
-        }
-
-        .link.selected {
-            stroke: #667eea;
-            stroke-opacity: 1;
-            stroke-width: 2.5px;
-        }
-
-        text.node-label {
-            font-size: 12px;
-            font-weight: 600;
-            text-anchor: middle;
-            pointer-events: none;
-            fill: #333;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
-        }
-
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.85em;
-            pointer-events: none;
-            z-index: 1000;
-            display: none;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .tooltip.active {
-            display: block;
-        }
-
-        .legend {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px;
+        .controls {
+            background-color: white;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-            font-size: 0.85em;
-            z-index: 100;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
+        .control-section {
+            margin-bottom: 20px;
         }
 
-        .legend-item:last-child {
+        .control-section:last-child {
             margin-bottom: 0;
         }
 
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            margin-right: 8px;
+        .control-section h3 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
         }
 
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            color: #667eea;
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
             font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            padding-right: 35px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .status-message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .visualization-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 600px;
+        }
+
+        #network-visualization {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ecf0f1;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .file-info {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .file-info.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
         }
 
         @keyframes spin {
@@ -277,396 +229,532 @@
             100% { transform: rotate(360deg); }
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #764ba2;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                max-height: 200px;
-            }
-
-            header h1 {
-                font-size: 1.8em;
-            }
+        .button-with-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🌐 Domain Network Visualizer</h1>
-        <p>Explore domain relationships with interactive D3.js visualization</p>
-    </header>
-
     <div class="container">
-        <aside class="sidebar">
-            <h2>⚙️ Controls</h2>
+        <header>
+            <h1>🌐 Domain Network Visualizer</h1>
+            <p>Import domain referrer data and visualize relationships using D3.js</p>
+        </header>
 
-            <div class="control-group">
-                <label for="searchInput">Search Domains:</label>
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Enter domain name..."
-                >
-            </div>
-
-            <div class="control-group">
-                <button id="loadSampleBtn">📊 Load Sample Data</button>
-                <button id="clearBtn">🗑️ Clear Network</button>
-            </div>
-
-            <div class="control-group">
-                <label for="forceStrength">Force Strength:</label>
-                <input 
-                    type="range" 
-                    id="forceStrength" 
-                    min="-300" 
-                    max="-10" 
-                    value="-100"
-                >
-                <span id="forceValue">-100</span>
-            </div>
-
-            <div class="control-group">
-                <label for="linkDistance">Link Distance:</label>
-                <input 
-                    type="range" 
-                    id="linkDistance" 
-                    min="20" 
-                    max="200" 
-                    value="60"
-                >
-                <span id="distanceValue">60</span>
-            </div>
-
-            <div class="control-group">
-                <button id="resetZoomBtn">🔍 Reset Zoom</button>
-            </div>
-
-            <div class="info-panel">
-                <h3>ℹ️ Instructions</h3>
-                <p>
-                    • <strong>Drag</strong> nodes to reposition<br>
-                    • <strong>Scroll</strong> to zoom<br>
-                    • <strong>Click & drag</strong> background to pan<br>
-                    • <strong>Click</strong> a node to select<br>
-                    • Use controls to customize
-                </p>
-            </div>
-
-            <div class="stats">
-                <h3>📈 Statistics</h3>
-                <div class="stat-item">
-                    <span>Nodes:</span>
-                    <strong id="nodeCount">0</strong>
+        <div class="controls">
+            <!-- CSV File Upload Section -->
+            <div class="control-section">
+                <h3>📁 Import Data</h3>
+                
+                <div class="form-group">
+                    <label for="csv-file">Select CSV File</label>
+                    <input type="file" id="csv-file" accept=".csv" />
+                    <div class="file-info" id="file-info"></div>
                 </div>
-                <div class="stat-item">
-                    <span>Links:</span>
-                    <strong id="linkCount">0</strong>
-                </div>
-                <div class="stat-item">
-                    <span>Selected:</span>
-                    <strong id="selectedCount">0</strong>
-                </div>
-            </div>
-        </aside>
 
-        <div id="visualization">
-            <svg id="networkSvg"></svg>
-            <div class="tooltip" id="tooltip"></div>
-            <div class="legend" id="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #667eea;"></div>
-                    <span>Domain</span>
+                <div id="column-selection" style="display: none;">
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="source-column">Source Column</label>
+                            <select id="source-column">
+                                <option value="">-- Select Column --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="target-column">Target Column</label>
+                            <select id="target-column">
+                                <option value="">-- Select Column --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="load-data-btn" disabled>
+                            <span class="button-with-spinner">
+                                <span class="loading-spinner"></span>
+                                Load Data
+                            </span>
+                        </button>
+                        <button id="clear-data-btn">Clear</button>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #764ba2;"></div>
-                    <span>Related</span>
+
+                <div class="status-message" id="status-message"></div>
+            </div>
+
+            <!-- Visualization Settings Section -->
+            <div class="control-section">
+                <h3>⚙️ Visualization Settings</h3>
+                
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="node-radius">Node Radius</label>
+                        <select id="node-radius">
+                            <option value="5">Small (5px)</option>
+                            <option value="8" selected>Medium (8px)</option>
+                            <option value="12">Large (12px)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link-distance">Link Distance</label>
+                        <select id="link-distance">
+                            <option value="50">Close (50px)</option>
+                            <option value="100" selected>Medium (100px)</option>
+                            <option value="150">Far (150px)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="reset-zoom-btn">🔄 Reset Zoom</button>
+                    <button id="download-svg-btn" disabled>⬇️ Download as SVG</button>
                 </div>
             </div>
         </div>
+
+        <div class="visualization-container">
+            <svg id="network-visualization"></svg>
+        </div>
     </div>
 
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <!-- D3.js v7 for visualization -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <script>
-        // Configuration
-        const CONFIG = {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            margin: { top: 0, right: 0, bottom: 0, left: 0 }
+        // ==========================================
+        // Global State
+        // ==========================================
+        let graphData = null;
+        let currentSimulation = null;
+        const state = {
+            sourceColumn: null,
+            targetColumn: null,
+            csvData: null
         };
 
-        // State
-        let networkData = {
-            nodes: [],
-            links: []
-        };
-        let selectedNode = null;
-        let simulation = null;
-
-        // Initialize SVG
-        const svg = d3.select('#networkSvg');
-        const container = svg.append('g').attr('class', 'container');
-        const linksGroup = container.append('g').attr('class', 'links');
-        const nodesGroup = container.append('g').attr('class', 'nodes');
-        const labelsGroup = container.append('g').attr('class', 'labels');
-
-        // Setup zoom
-        const zoom = d3.zoom()
-            .on('zoom', (event) => {
-                container.attr('transform', event.transform);
-            });
-
-        svg.call(zoom);
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            const rect = document.getElementById('visualization').getBoundingClientRect();
-            CONFIG.width = rect.width;
-            CONFIG.height = rect.height;
-            svg.attr('width', CONFIG.width).attr('height', CONFIG.height);
-            if (simulation) simulation.alpha(0.3).restart();
-        });
-
-        // Initialize force simulation
-        function initializeSimulation() {
-            simulation = d3.forceSimulation(networkData.nodes)
-                .force('link', d3.forceLink(networkData.links)
-                    .id(d => d.id)
-                    .distance(+document.getElementById('linkDistance').value))
-                .force('charge', d3.forceManyBody()
-                    .strength(+document.getElementById('forceStrength').value))
-                .force('center', d3.forceCenter(CONFIG.width / 2, CONFIG.height / 2))
-                .force('collision', d3.forceCollide().radius(30))
-                .on('tick', () => {
-                    updateVisualization();
-                });
+        // ==========================================
+        // Utility Functions
+        // ==========================================
+        function showMessage(message, type = 'info') {
+            const messageEl = document.getElementById('status-message');
+            messageEl.textContent = message;
+            messageEl.className = `status-message ${type}`;
         }
 
-        // Update visualization
-        function updateVisualization() {
-            // Update links
-            const links = linksGroup.selectAll('.link').data(networkData.links, d => `${d.source.id}-${d.target.id}`);
-            links.exit().remove();
-            links.enter()
-                .append('line')
-                .attr('class', 'link')
-                .merge(links)
-                .attr('x1', d => d.source.x)
-                .attr('y1', d => d.source.y)
-                .attr('x2', d => d.target.x)
-                .attr('y2', d => d.target.y);
+        function hideMessage() {
+            const messageEl = document.getElementById('status-message');
+            messageEl.className = 'status-message';
+        }
 
-            // Update nodes
-            const nodes = nodesGroup.selectAll('.node').data(networkData.nodes, d => d.id);
-            nodes.exit().remove();
-            nodes.enter()
+        function updateFileInfo(filename, rowCount) {
+            const fileInfoEl = document.getElementById('file-info');
+            fileInfoEl.innerHTML = `
+                <strong>File:</strong> ${filename} | 
+                <strong>Rows:</strong> ${rowCount} | 
+                <strong>Status:</strong> ✓ Ready to import
+            `;
+            fileInfoEl.classList.add('active');
+        }
+
+        function clearFileInfo() {
+            const fileInfoEl = document.getElementById('file-info');
+            fileInfoEl.innerHTML = '';
+            fileInfoEl.classList.remove('active');
+        }
+
+        // ==========================================
+        // CSV File Handling
+        // ==========================================
+        document.getElementById('csv-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                clearFileInfo();
+                document.getElementById('column-selection').style.display = 'none';
+                return;
+            }
+
+            showMessage('Parsing CSV file...', 'info');
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    if (results.errors.length > 0) {
+                        showMessage('Error parsing CSV file. Please check the format.', 'error');
+                        return;
+                    }
+
+                    if (results.data.length === 0) {
+                        showMessage('CSV file is empty. Please select a file with data.', 'error');
+                        return;
+                    }
+
+                    state.csvData = results.data;
+                    const columns = results.meta.fields || Object.keys(results.data[0] || {});
+
+                    // Update file info
+                    updateFileInfo(file.name, results.data.length);
+
+                    // Populate column selection dropdowns
+                    populateColumnSelects(columns);
+
+                    // Show column selection section
+                    document.getElementById('column-selection').style.display = 'block';
+
+                    hideMessage();
+                },
+                error: (error) => {
+                    showMessage(`Error reading file: ${error.message}`, 'error');
+                }
+            });
+        });
+
+        function populateColumnSelects(columns) {
+            const sourceSelect = document.getElementById('source-column');
+            const targetSelect = document.getElementById('target-column');
+
+            // Clear existing options except the first placeholder
+            sourceSelect.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
+            targetSelect.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
+
+            // Add column options
+            columns.forEach(col => {
+                const optionSource = document.createElement('option');
+                optionSource.value = col;
+                optionSource.textContent = col;
+                sourceSelect.appendChild(optionSource);
+
+                const optionTarget = document.createElement('option');
+                optionTarget.value = col;
+                optionTarget.textContent = col;
+                targetSelect.appendChild(optionTarget);
+            });
+
+            // Auto-select common column names if they exist
+            const sourcePatterns = ['source', 'from', 'domain', 'referrer'];
+            const targetPatterns = ['target', 'to', 'destination', 'domain_target'];
+
+            sourceSelect.value = columns.find(col => 
+                sourcePatterns.some(pattern => col.toLowerCase().includes(pattern))
+            ) || '';
+
+            targetSelect.value = columns.find(col => 
+                targetPatterns.some(pattern => col.toLowerCase().includes(pattern))
+            ) || '';
+
+            // Enable load button when both columns are selected
+            updateLoadButtonState();
+        }
+
+        // ==========================================
+        // Column Selection
+        // ==========================================
+        document.getElementById('source-column').addEventListener('change', () => {
+            state.sourceColumn = document.getElementById('source-column').value;
+            updateLoadButtonState();
+        });
+
+        document.getElementById('target-column').addEventListener('change', () => {
+            state.targetColumn = document.getElementById('target-column').value;
+            updateLoadButtonState();
+        });
+
+        function updateLoadButtonState() {
+            const loadBtn = document.getElementById('load-data-btn');
+            const isValid = state.sourceColumn && state.targetColumn && state.csvData;
+            loadBtn.disabled = !isValid;
+        }
+
+        // ==========================================
+        // Data Loading
+        // ==========================================
+        document.getElementById('load-data-btn').addEventListener('click', () => {
+            loadNetworkData();
+        });
+
+        function loadNetworkData() {
+            const loadBtn = document.getElementById('load-data-btn');
+            const spinner = loadBtn.querySelector('.loading-spinner');
+
+            loadBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+
+            showMessage('Processing data and creating visualization...', 'info');
+
+            // Simulate async processing
+            setTimeout(() => {
+                try {
+                    graphData = buildGraphFromCSV(
+                        state.csvData,
+                        state.sourceColumn,
+                        state.targetColumn
+                    );
+
+                    visualizeNetwork(graphData);
+
+                    spinner.style.display = 'none';
+                    loadBtn.disabled = false;
+
+                    showMessage(
+                        `Network loaded successfully! Nodes: ${graphData.nodes.length}, Links: ${graphData.links.length}`,
+                        'success'
+                    );
+
+                    // Enable download button
+                    document.getElementById('download-svg-btn').disabled = false;
+                } catch (error) {
+                    spinner.style.display = 'none';
+                    loadBtn.disabled = false;
+                    showMessage(`Error processing data: ${error.message}`, 'error');
+                    console.error('Error:', error);
+                }
+            }, 100);
+        }
+
+        function buildGraphFromCSV(data, sourceCol, targetCol) {
+            const nodes = new Set();
+            const links = [];
+
+            data.forEach(row => {
+                const source = row[sourceCol]?.trim();
+                const target = row[targetCol]?.trim();
+
+                if (source && target && source !== target) {
+                    nodes.add(source);
+                    nodes.add(target);
+                    links.push({ source, target });
+                }
+            });
+
+            return {
+                nodes: Array.from(nodes).map(id => ({ id })),
+                links: links
+            };
+        }
+
+        // ==========================================
+        // D3.js Visualization
+        // ==========================================
+        function visualizeNetwork(data) {
+            // Clear previous visualization
+            d3.select('#network-visualization').selectAll('*').remove();
+
+            const svg = d3.select('#network-visualization');
+            const width = document.getElementById('network-visualization').clientWidth || 800;
+            const height = document.getElementById('network-visualization').clientHeight || 600;
+
+            svg.attr('width', width).attr('height', height);
+
+            // Create group for zoom/pan
+            const g = svg.append('g');
+
+            // Add zoom behavior
+            const zoom = d3.zoom().on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+            svg.call(zoom);
+
+            // Store reset zoom function
+            window.resetZoom = () => {
+                svg.transition().duration(750).call(
+                    zoom.transform,
+                    d3.zoomIdentity.translate(width / 2, height / 2).scale(1)
+                );
+            };
+
+            // Create force simulation
+            const nodeRadius = parseInt(document.getElementById('node-radius').value);
+            const linkDistance = parseInt(document.getElementById('link-distance').value);
+
+            const simulation = d3.forceSimulation(data.nodes)
+                .force('link', d3.forceLink(data.links)
+                    .id(d => d.id)
+                    .distance(linkDistance))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2));
+
+            currentSimulation = simulation;
+
+            // Create links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(data.links)
+                .enter()
+                .append('line')
+                .attr('stroke', '#999')
+                .attr('stroke-opacity', 0.6)
+                .attr('stroke-width', 1.5);
+
+            // Create nodes
+            const node = g.append('g')
+                .selectAll('circle')
+                .data(data.nodes)
+                .enter()
                 .append('circle')
-                .attr('class', 'node')
-                .attr('r', d => d.size || 8)
-                .attr('fill', d => d.color || '#667eea')
+                .attr('r', nodeRadius)
+                .attr('fill', '#3498db')
+                .attr('stroke', '#2c3e50')
+                .attr('stroke-width', 2)
+                .style('cursor', 'pointer')
                 .call(d3.drag()
                     .on('start', dragStarted)
                     .on('drag', dragged)
-                    .on('end', dragEnded))
-                .on('click', (event, d) => {
-                    event.stopPropagation();
-                    selectNode(d);
-                })
-                .on('mouseenter', (event, d) => showTooltip(event, d))
-                .on('mouseleave', hideTooltip)
-                .merge(nodes)
-                .attr('cx', d => d.x)
-                .attr('cy', d => d.y);
+                    .on('end', dragEnded));
 
-            // Update labels
-            const labels = labelsGroup.selectAll('text').data(networkData.nodes, d => d.id);
-            labels.exit().remove();
-            labels.enter()
+            // Add node labels
+            const labels = g.append('g')
+                .selectAll('text')
+                .data(data.nodes)
+                .enter()
                 .append('text')
-                .attr('class', 'node-label')
-                .text(d => d.label)
-                .merge(labels)
-                .attr('x', d => d.x)
-                .attr('y', d => d.y + 4);
+                .text(d => d.id)
+                .attr('font-size', '12px')
+                .attr('dy', '.31em')
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#2c3e50')
+                .attr('pointer-events', 'none')
+                .style('user-select', 'none');
 
-            updateStats();
-        }
+            // Add interactivity
+            node.on('mouseenter', function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', nodeRadius + 4)
+                    .attr('fill', '#e74c3c');
 
-        // Drag functions
-        function dragStarted(event, d) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        }
+                link.style('stroke', l =>
+                    l.source.id === d.id || l.target.id === d.id ? '#e74c3c' : '#999'
+                ).style('stroke-width', l =>
+                    l.source.id === d.id || l.target.id === d.id ? 2.5 : 1.5
+                );
+            })
+            .on('mouseleave', function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', nodeRadius)
+                    .attr('fill', '#3498db');
 
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-        }
+                link.style('stroke', '#999')
+                    .style('stroke-width', 1.5);
+            });
 
-        function dragEnded(event, d) {
-            if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
+            // Update positions on simulation tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
 
-        // Node selection
-        function selectNode(d) {
-            selectedNode = selectedNode?.id === d.id ? null : d;
-            
-            nodesGroup.selectAll('.node').classed('selected', node => node.id === selectedNode?.id);
-            linksGroup.selectAll('.link').classed('selected', link => 
-                selectedNode && (link.source.id === selectedNode.id || link.target.id === selectedNode.id)
-            );
-            
-            updateStats();
-        }
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
 
-        // Tooltip
-        function showTooltip(event, d) {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.textContent = `${d.label} (${d.id})`;
-            tooltip.classList.add('active');
-            tooltip.style.left = (event.pageX + 10) + 'px';
-            tooltip.style.top = (event.pageY + 10) + 'px';
-        }
+                labels
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y);
+            });
 
-        function hideTooltip() {
-            document.getElementById('tooltip').classList.remove('active');
-        }
-
-        // Update statistics
-        function updateStats() {
-            document.getElementById('nodeCount').textContent = networkData.nodes.length;
-            document.getElementById('linkCount').textContent = networkData.links.length;
-            
-            let connectedCount = 0;
-            if (selectedNode) {
-                connectedCount = networkData.links.filter(link =>
-                    link.source.id === selectedNode.id || link.target.id === selectedNode.id
-                ).length;
+            // Drag functions
+            function dragStarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
             }
-            document.getElementById('selectedCount').textContent = connectedCount;
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragEnded(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
         }
 
-        // Generate sample data
-        function generateSampleData() {
-            networkData = {
-                nodes: [
-                    { id: 'example.com', label: 'example.com', color: '#667eea', size: 12 },
-                    { id: 'sub1.example.com', label: 'sub1', color: '#764ba2', size: 10 },
-                    { id: 'sub2.example.com', label: 'sub2', color: '#764ba2', size: 10 },
-                    { id: 'api.example.com', label: 'api', color: '#764ba2', size: 10 },
-                    { id: 'cdn.example.com', label: 'cdn', color: '#764ba2', size: 10 },
-                    { id: 'mail.example.com', label: 'mail', color: '#764ba2', size: 10 },
-                    { id: 'staging.example.com', label: 'staging', color: '#764ba2', size: 10 },
-                    { id: 'dev.example.com', label: 'dev', color: '#764ba2', size: 10 }
-                ],
-                links: [
-                    { source: 'example.com', target: 'sub1.example.com' },
-                    { source: 'example.com', target: 'sub2.example.com' },
-                    { source: 'example.com', target: 'api.example.com' },
-                    { source: 'example.com', target: 'cdn.example.com' },
-                    { source: 'example.com', target: 'mail.example.com' },
-                    { source: 'example.com', target: 'staging.example.com' },
-                    { source: 'example.com', target: 'dev.example.com' },
-                    { source: 'sub1.example.com', target: 'api.example.com' },
-                    { source: 'sub2.example.com', target: 'staging.example.com' }
-                ]
-            };
-            initializeSimulation();
-            updateVisualization();
-        }
-
-        // Event listeners
-        document.getElementById('loadSampleBtn').addEventListener('click', generateSampleData);
-
-        document.getElementById('clearBtn').addEventListener('click', () => {
-            networkData = { nodes: [], links: [] };
-            selectedNode = null;
-            linksGroup.selectAll('.link').remove();
-            nodesGroup.selectAll('.node').remove();
-            labelsGroup.selectAll('text').remove();
-            updateStats();
-        });
-
-        document.getElementById('resetZoomBtn').addEventListener('click', () => {
-            svg.transition().duration(750).call(
-                zoom.transform,
-                d3.zoomIdentity.translate(0, 0).scale(1)
-            );
-        });
-
-        document.getElementById('forceStrength').addEventListener('input', (e) => {
-            document.getElementById('forceValue').textContent = e.target.value;
-            if (simulation) {
-                simulation.force('charge', d3.forceManyBody().strength(+e.target.value));
-                simulation.alpha(0.3).restart();
+        // ==========================================
+        // Settings & Export
+        // ==========================================
+        document.getElementById('node-radius').addEventListener('change', () => {
+            if (graphData) {
+                visualizeNetwork(graphData);
             }
         });
 
-        document.getElementById('linkDistance').addEventListener('input', (e) => {
-            document.getElementById('distanceValue').textContent = e.target.value;
-            if (simulation) {
-                simulation.force('link', d3.forceLink(networkData.links)
-                    .id(d => d.id)
-                    .distance(+e.target.value));
-                simulation.alpha(0.3).restart();
+        document.getElementById('link-distance').addEventListener('change', () => {
+            if (graphData) {
+                visualizeNetwork(graphData);
             }
         });
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            nodesGroup.selectAll('.node').style('opacity', d =>
-                !query || d.id.toLowerCase().includes(query) ? 1 : 0.2
-            );
-            labelsGroup.selectAll('text').style('opacity', d =>
-                !query || d.id.toLowerCase().includes(query) ? 1 : 0.2
-            );
+        document.getElementById('reset-zoom-btn').addEventListener('click', () => {
+            if (window.resetZoom) {
+                window.resetZoom();
+            }
         });
 
-        svg.on('click', () => {
-            if (selectedNode) {
-                selectedNode = null;
-                nodesGroup.selectAll('.node').classed('selected', false);
-                linksGroup.selectAll('.link').classed('selected', false);
-                updateStats();
-            }
+        document.getElementById('download-svg-btn').addEventListener('click', () => {
+            if (!graphData) return;
+
+            const svg = document.getElementById('network-visualization');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            canvas.width = svg.clientWidth;
+            canvas.height = svg.clientHeight;
+
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = svgUrl;
+            downloadLink.download = `domain-network-${new Date().toISOString().slice(0, 10)}.svg`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            showMessage('SVG downloaded successfully!', 'success');
+            setTimeout(hideMessage, 3000);
+        });
+
+        document.getElementById('clear-data-btn').addEventListener('click', () => {
+            // Reset all state
+            state.sourceColumn = null;
+            state.targetColumn = null;
+            state.csvData = null;
+            graphData = null;
+
+            // Clear UI
+            document.getElementById('csv-file').value = '';
+            document.getElementById('source-column').value = '';
+            document.getElementById('target-column').value = '';
+            document.getElementById('column-selection').style.display = 'none';
+            clearFileInfo();
+            hideMessage();
+
+            // Clear visualization
+            d3.select('#network-visualization').selectAll('*').remove();
+
+            // Disable buttons
+            document.getElementById('load-data-btn').disabled = true;
+            document.getElementById('download-svg-btn').disabled = true;
+
+            showMessage('Data cleared. Ready for new import.', 'info');
+            setTimeout(hideMessage, 2000);
         });
 
         // Initialize
-        updateStats();
+        hideMessage();
     </script>
 </body>
 </html>
