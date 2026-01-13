@@ -1,0 +1,11 @@
+{
+  "name": "domain-network-visualizer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "live-server static --port=3000"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1"
+  }
+}
